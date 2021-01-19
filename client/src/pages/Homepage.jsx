@@ -57,6 +57,7 @@ const Homepage = () => {
         item.icon = statusId;
         const rawData = await fetch("https://trello-family-backend.herokuapp.com/createTask", {
             method: "POST",
+            credentials: 'same-origin',
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -155,6 +156,7 @@ const Homepage = () => {
         /* Update database */
         const rawData = await fetch("https://trello-family-backend.herokuapp.com/deleteTask/"+itemIndex, {
             method: "DELETE",
+            credentials: 'same-origin'
         });
         console.log(await rawData.json());
 
