@@ -31,14 +31,14 @@ app.use(express.json());
 
 /* Backend routes - TESTS */
 const Task = require("./models/Task");
-app.post("/createTask", async (req, res) => {
+app.post("https://nifty-mirzakhani-1530fc.netlify.app/createTask", async (req, res) => {
   console.log("HIT IN SERVER (ADD):", req.body);
   Task.create(req.body);
   console.log("HIT IN DATABASE:");
   console.log(await Task.find());
   await res.json("End of task creation reached.");
 });
-app.delete("/deleteTask/:id", async (req, res) => {
+app.delete("https://nifty-mirzakhani-1530fc.netlify.app/deleteTask/:id", async (req, res) => {
   await console.log("HIT IN SERVER (DEL):", req.params.id);
   await Task.deleteOne({ id: req.params.id });
   console.log("HIT IN DATABASE:");
