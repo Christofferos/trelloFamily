@@ -55,7 +55,7 @@ const Homepage = () => {
 
         /* Update state in database */
         item.icon = statusId;
-        const rawData = await fetch("/createTask", {
+        const rawData = await fetch("https://trello-family-backend.herokuapp.com/createTask", {
             method: "POST",
             headers: {
             'Accept': 'application/json',
@@ -153,7 +153,7 @@ const Homepage = () => {
     // @route   DELETE /deleteTask
     const handleArchiveCard = async (itemIndex) => {
         /* Update database */
-        const rawData = await fetch("/deleteTask/"+itemIndex, {
+        const rawData = await fetch("https://trello-family-backend.herokuapp.com/deleteTask/"+itemIndex, {
             method: "DELETE",
         });
         console.log(await rawData.json());
