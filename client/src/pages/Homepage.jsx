@@ -7,11 +7,31 @@ import { data, statuses, nrOfItems } from "../data";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "https://trello-family-backend.herokuapp.com/";
+
 let itemIncrementId = data.length;
+let socket;
 
 // Runs every time something is re-rendered.
 const Homepage = () => {
     const [items, setItems] = useState(data);
+
+    /* @desc Connect to the socket eserver on component mount with useEffect */
+    useEffect(() => {
+        socket = socketIOClient(ENDPOINT);
+        
+        /* Dev logs in client */
+        socket.on("createTask", data => {
+            console.log(data);
+        });
+        socket.on("deleteTask", data => {
+            console.log(data);
+        });
+
+        /* Clean up the effect (disconnect from socket server) */
+        return () => socket.disconnect();
+    }, []);
 
     // @desc    Update data when user drops a task/card in a column. 
     const onDrop = (item, monitor, status) => {
@@ -55,16 +75,7 @@ const Homepage = () => {
 
         /* Update state in database */
         item.icon = statusId;
-        const rawData = await fetch("https://trello-family-backend.herokuapp.com/createTask", {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item)
-        });
-        console.log(await rawData.json());
+        socket.emit("createTask", item);
         item.icon = iconAndStatus.icon;
 
         /* Update states in front-end */
@@ -154,11 +165,7 @@ const Homepage = () => {
     // @route   DELETE /deleteTask
     const handleArchiveCard = async (itemIndex) => {
         /* Update database */
-        const rawData = await fetch("https://trello-family-backend.herokuapp.com/deleteTask/"+itemIndex, {
-            method: "DELETE",
-            credentials: 'same-origin'
-        });
-        console.log(await rawData.json());
+        socket.emit("deleteTask", itemIndex);
 
         /* Update state in front-end */
         await setItems(prevState => {

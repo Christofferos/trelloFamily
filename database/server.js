@@ -1,11 +1,6 @@
-const express = require("express");
-const app = express();
-
-/* Parsing application/json */
-app.use(express.json());
+const io = require("socket.io")();
 
 const session = require("express-session");
-const fetch = require("node-fetch");
 
 const dotenv = require("dotenv");
 const dotenvResult = dotenv.config({ path: "./config/config.env" }); /* ## Load env variables ## */
@@ -16,28 +11,22 @@ if (dotenvResult.error) {
 /* Connect to Mongo-database - Persistant data storage for trello tasks. */
 const connectDB = require("./config/db.js");
 connectDB();
-
-/* Backend routes - TESTS */
 const Task = require("./models/Task");
-app.post("/createTask", async (req, res) => {
-  console.log("HIT IN SERVER (ADD):", req.body);
-  Task.create(req.body);
-  console.log("HIT IN DATABASE:");
-  console.log(await Task.find());
-  await res.header("Access-Control-Allow-Origin", "*");
-  await res.header("Access-Control-Allow-Headers", "*");
-  await res.json("End of task creation reached.");
-});
-app.delete("/deleteTask/:id", async (req, res) => {
-  await console.log("HIT IN SERVER (DEL):", req.params.id);
-  await Task.deleteOne({ id: req.params.id });
-  console.log("HIT IN DATABASE:");
-  console.log(await Task.find());
-  await res.header("Access-Control-Allow-Origin", "*");
-  await res.header("Access-Control-Allow-Headers", "*");
-  await res.json("End of task deletion reached.");
-});
-/* - - - - - - - - - - - - - - - - - - - - */
 
-/* localhost PORT */
-app.listen(process.env.PORT || 3000);
+/* ### [Connection]: While atleast one client is connected to server. ### */
+io.on("connection", (client) => {
+  client.on("createTask", createTask);
+  client.on("deleteTask", deleteTask);
+
+  function createTask(item) {
+    Task.create(item);
+    client.emit("createTask", "End of task creation reached.");
+  }
+  function deleteTask(idSent) {
+    Task.deleteOne({ id: idSent });
+    client.emit("deleteTask", "End of task deletion reached.");
+  }
+});
+
+/* ## Listen on PORT provided by Heroku (or 3000 if local): ## */
+io.listen(process.env.PORT || 3000);
