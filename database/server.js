@@ -24,6 +24,8 @@ app.post("/createTask", async (req, res) => {
   Task.create(req.body);
   console.log("HIT IN DATABASE:");
   console.log(await Task.find());
+  await res.header("Access-Control-Allow-Origin", "*");
+  await res.header("Access-Control-Allow-Headers", "*");
   await res.json("End of task creation reached.");
 });
 app.delete("/deleteTask/:id", async (req, res) => {
@@ -31,6 +33,8 @@ app.delete("/deleteTask/:id", async (req, res) => {
   await Task.deleteOne({ id: req.params.id });
   console.log("HIT IN DATABASE:");
   console.log(await Task.find());
+  await res.header("Access-Control-Allow-Origin", "*");
+  await res.header("Access-Control-Allow-Headers", "*");
   await res.json("End of task deletion reached.");
 });
 /* - - - - - - - - - - - - - - - - - - - - */
