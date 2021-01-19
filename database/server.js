@@ -1,11 +1,21 @@
+const express = require("express");
+const http = require("http");
+const app = express();
+const server = http.createServer(app);
+
 const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+      "Access-Control-Allow-Credentials": true,
+    };
+    res.writeHead(200, headers);
+    res.end();
   },
 });
 
 const session = require("express-session");
-
 const dotenv = require("dotenv");
 const dotenvResult = dotenv.config({ path: "./config/config.env" }); /* ## Load env variables ## */
 if (dotenvResult.error) {
@@ -19,6 +29,7 @@ const Task = require("./models/Task");
 
 /* ### [Connection]: While atleast one client is connected to server. ### */
 io.on("connection", (client) => {
+  console.log("Connected!");
   client.on("createTask", createTask);
   client.on("deleteTask", deleteTask);
 
@@ -33,4 +44,4 @@ io.on("connection", (client) => {
 });
 
 /* ## Listen on PORT provided by Heroku (or 3000 if local): ## */
-io.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3000);
