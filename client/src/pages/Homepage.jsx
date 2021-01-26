@@ -20,10 +20,10 @@ const Homepage = () => {
     /* @desc Connect to the socket eserver on component mount with useEffect */
     useEffect(() => {
         socket = socketIOClient(SERVER_ENDPOINT, {
-            withCredentials: true,
+            /* withCredentials: true,
             customHeaders: {
                 "custom-header": "abcd"
-            }
+            } */
         });
         
         /* Dev logs in client */
