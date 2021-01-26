@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
-const CLIENT_ENDPOINT = "https://nifty-mirzakhani-1530fc.netlify.app/";
+const CLIENT_ENDPOINT = "*"; // https://nifty-mirzakhani-1530fc.netlify.app/
 
 const io = require("socket.io")(server, {
   cors: {
