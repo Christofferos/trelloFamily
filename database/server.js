@@ -7,7 +7,8 @@ const CLIENT_ENDPOINT = "*"; // https://nifty-mirzakhani-1530fc.netlify.app/
 const io = require("socket.io")(server, {
   cors: {
     origin: CLIENT_ENDPOINT,
-    /* methods: ["GET", "POST", "DELETE"],
+    methods: ["GET", "PUT", "POST", "DELETE"], // Test
+    /*
     allowedHeaders: ["custom-header"],
     credentials: true, */
   },
