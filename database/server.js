@@ -2,9 +2,16 @@ const express = require("express");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
+const CLIENT_ENDPOINT = "https://nifty-mirzakhani-1530fc.netlify.app/";
 
 const io = require("socket.io")(server, {
-  handlePreflightRequest: (req, res) => {
+  cors: {
+    origin: CLIENT_ENDPOINT,
+    methods: ["GET", "POST", "DELETE"],
+    allowedHeaders: ["custom-header"],
+    credentials: true,
+  },
+  /* handlePreflightRequest: (req, res) => {
     const headers = {
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
       "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
@@ -12,7 +19,7 @@ const io = require("socket.io")(server, {
     };
     res.writeHead(200, headers);
     res.end();
-  },
+  }, */
 });
 
 const session = require("express-session");

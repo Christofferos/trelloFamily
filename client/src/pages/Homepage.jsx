@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "https://trello-family-backend.herokuapp.com/";
+const SERVER_ENDPOINT = "https://trello-family-backend.herokuapp.com/";
 
 let itemIncrementId = data.length;
 let socket;
@@ -19,7 +19,12 @@ const Homepage = () => {
 
     /* @desc Connect to the socket eserver on component mount with useEffect */
     useEffect(() => {
-        socket = socketIOClient(ENDPOINT);
+        socket = socketIOClient(SERVER_ENDPOINT, {
+            withCredentials: true,
+            customHeaders: {
+                "custom-header": "abcd"
+            }
+        });
         
         /* Dev logs in client */
         socket.on("createTask", data => {
