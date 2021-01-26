@@ -46,6 +46,7 @@ io.on("connection", (client) => {
     client.emit("createTask", "End of task creation reached. Item: " + item);
   }
   function deleteTask(idSent) {
+    Task.remove({ id: idSent });
     Task.deleteOne({ id: idSent });
     client.emit("deleteTask", "End of task deletion reached. ID sent: " + idSent);
   }
