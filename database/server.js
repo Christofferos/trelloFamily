@@ -43,11 +43,11 @@ io.on("connection", (client) => {
 
   function createTask(item) {
     Task.create(item);
-    client.emit("createTask", "End of task creation reached.");
+    client.emit("createTask", "End of task creation reached. Item: " + item);
   }
   function deleteTask(idSent) {
     Task.deleteOne({ id: idSent });
-    client.emit("deleteTask", "End of task deletion reached.");
+    client.emit("deleteTask", "End of task deletion reached. ID sent: " + idSent);
   }
 });
 
