@@ -4,7 +4,7 @@ import Window from "./Window";
 import ITEM_TYPE from "../data/types";
 
 // This is responsible for moving items within or between trello columns.
-const Item = ({ item, index, moveItem, status, statusId, handleItemButtonMove, handleDescChange, handleTitleChange, handleCommentSave, handleCommentChange, handleArchiveCard }) => {
+const Item = ({ item, index, moveItem, status, statusId, handleItemButtonMove, handleDescChange, handleTitleChange, handleCommentSave, handleCommentChange, handleSaveCard, handleArchiveCard }) => {
     const ref = useRef(null);
 
     // useDrop hook.
@@ -76,6 +76,7 @@ const Item = ({ item, index, moveItem, status, statusId, handleItemButtonMove, h
                 handleTitleChange={handleTitleChange}
                 handleCommentSave={handleCommentSave}
                 handleCommentChange={handleCommentChange}
+                handleSaveCard={handleSaveCard}
                 handleArchiveCard={handleArchiveCard}
             />
         </Fragment>

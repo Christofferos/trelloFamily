@@ -1,5 +1,5 @@
 const data = [
-  {
+  /* {
     id: 1,
     icon: "⭕️",
     status: "open",
@@ -43,7 +43,7 @@ const data = [
     modified: "-",
     activity: [],
     currentComment: "",
-  },
+  }, */
 ];
 
 const statuses = [

@@ -34,11 +34,11 @@ label {
   display: block;
 }
 
-button,
+/* button,
 input {
   padding: 4px;
   border: 1px solid var(--disabled-color);
-}
+} */
 
 button {
   outline: none;
@@ -225,4 +225,12 @@ select {
 
 .comment-btn:hover {
   background-color: #4dc92f;
+}
+
+.archiveOrSaveTask {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  margin: 3vh 0rem 0rem 0rem;
 }

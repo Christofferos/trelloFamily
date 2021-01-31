@@ -8,24 +8,16 @@ const io = require("socket.io")(server, {
   cors: {
     origin: CLIENT_ENDPOINT,
     methods: ["GET", "PUT", "POST", "DELETE"], // Test
-    /*
-    allowedHeaders: ["custom-header"],
-    credentials: true, */
   },
-  /* handlePreflightRequest: (req, res) => {
-    const headers = {
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
-      "Access-Control-Allow-Credentials": true,
-    };
-    res.writeHead(200, headers);
-    res.end();
-  }, */
 });
 
+/* ## Load env variables ## */
 const session = require("express-session");
 const dotenv = require("dotenv");
-const dotenvResult = dotenv.config({ path: "./config/config.env" }); /* ## Load env variables ## */
+const dotenvResult = dotenv.config({
+  /* PATH: Production: "./config/config.env" */ /* Development: "./database/config/config.env" */ 
+  path: "./config/config.env",
+}); 
 if (dotenvResult.error) {
   throw dotenvResult.error;
 }
@@ -35,22 +27,56 @@ const connectDB = require("./config/db.js");
 connectDB();
 const Task = require("./models/Task");
 
+const clientRoom = {};
+let clientID = 0;
+let roomName = 001;
+
 /* ### [Connection]: While atleast one client is connected to server. ### */
 io.on("connection", (client) => {
+  client.on("joinRoom", handleJoinRoom);
   console.log("Connected!");
   client.on("createTask", createTask);
   client.on("deleteTask", deleteTask);
+  client.on("getItems", getItems);
+  client.on("updateTask", updateTask);
 
+  function handleJoinRoom() {
+    clientID += 1;
+    client.number = clientID;
+    clientRoom[client.id] = roomName;
+    client.join(roomName);
+    // console.log(clientRoom);
+  }
   function createTask(item) {
     Task.create(item);
-    client.emit("createTask", "End of task creation reached. Item: " + item);
+    // io.sockets.in(roomName).emit("createTask", item);
+    client.emit("createTask", item);
   }
-  function deleteTask(idSent) {
-    Task.remove({ id: idSent });
-    Task.deleteOne({ id: idSent });
-    client.emit("deleteTask", "End of task deletion reached. ID sent: " + idSent);
+  async function deleteTask(idSent, items) {
+    const nrOfDeleted = await Task.deleteOne({ id: idSent });
+    // io.sockets.in(roomName).emit("deleteTask", nrOfDeleted);
+    client.emit("deleteTask", nrOfDeleted);
+    await io.sockets.in(roomName).emit("getItemsResponse", !items ? [] : items);
+  }
+  async function getItems() {
+    // console.log("TEST");
+    const items = await Task.find({ id: { $gt: -1 } });
+    io.sockets.in(roomName).emit("getItemsResponse", items);
+    // client.emit("getItemsResponse", items);
+  }
+
+  async function updateTask(item, items) {
+    await Task.replaceOne({id: item.id}, item);
+    await io.sockets.in(roomName).emit("getItemsResponse", items);
   }
 });
+
+/* async function getItems() {
+  console.log("TEST");
+  const items = await Task.find({ id: { $gt: -1 } });
+  io.sockets.in(roomName).emit("getItemsResponse", items);
+  // client.emit("getItemsResponse", items);
+} */
 
 /* ## Listen on PORT provided by Heroku (or 3000 if local): ## */
 server.listen(process.env.PORT || 3000);
