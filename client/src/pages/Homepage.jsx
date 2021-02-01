@@ -102,6 +102,7 @@ const Homepage = () => {
 
         /* Update state in database */
         // item.icon = statusId;
+        item.icon = null;
         socket.emit("createTask", item);
         // item.icon = await iconAndStatus.icon;
 
