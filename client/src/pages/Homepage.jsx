@@ -101,11 +101,9 @@ const Homepage = () => {
         };
 
         /* Update state in database */
-        item.icon = statusId;
+        // item.icon = statusId;
         socket.emit("createTask", item);
-        item.icon = await iconAndStatus.icon;
-        console.log(iconAndStatus.icon);
-        console.log(item.icon);
+        // item.icon = await iconAndStatus.icon;
 
         /* Update states in front-end */
         setItems(prevState => {
@@ -114,7 +112,7 @@ const Homepage = () => {
             return [...newItems];
         });
 
-        console.log(item);
+        // console.log(item);
 
         socket.emit("getItems");
     };
