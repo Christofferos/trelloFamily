@@ -27,7 +27,8 @@ const Homepage = () => {
         socket.on("getItemsResponse", (data, dataLength) => {
             console.log("Data sent from the server, getItemsResponse: ");
             console.log(data);
-            itemId = (!data && dataLength !== 0) ? Math.floor(Math.random() * (98) + 1) : data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), dataLength === 1 ? data.id : data[0].id);
+            console.log(dataLength);
+            itemId = (!data && dataLength !== 0) ? Math.floor(Math.random() * (98) + 1) : data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), Number(dataLength) === 1 ? data.id : data[0].id);
             // itemId = data.length ? data.length : 0;
             if (!itemId) itemId = 0; // will check for empty strings (""), null, undefined, false and the numbers 0 and NaN
             setItems(data);
@@ -53,6 +54,7 @@ const Homepage = () => {
                 .filter(itemObj => itemObj.id !== item.id)
                 .concat({ ...item, status, icon: mapping.icon });
             console.log(newItems);
+            socket.emit("updateTask", newItems.filter((itemElement) => itemElement.id === item.id)[0], newItems);
             return [...newItems];
         });
     };
