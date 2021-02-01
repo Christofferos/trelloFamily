@@ -180,7 +180,7 @@ const Homepage = () => {
     const handleSaveCard = async (itemIndex) => {
          /* Update database */
          console.log("Update database request sent."); 
-         socket.emit("updateTask", items.filter((item) => item.id === itemIndex)[0], items);
+         socket.emit("updateTask", !items ? [] : items.filter((item) => item.id === itemIndex)[0], items); // Change
          alert("Save was successful");
     }
 
@@ -188,7 +188,7 @@ const Homepage = () => {
     // @route   DELETE /deleteTask
     const handleArchiveCard = async (itemIndex) => {
         /* Update database */
-        socket.emit("deleteTask", itemIndex, items.filter((item) => item.id !== itemIndex)[0]);
+        socket.emit("deleteTask", itemIndex, !items ? [] : items.filter((item) => item.id !== itemIndex)[0]); // Change
 
         /* Update state in front-end */
         await setItems(prevState => {
