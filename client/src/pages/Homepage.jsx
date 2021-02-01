@@ -223,7 +223,7 @@ const Homepage = () => {
                         <h2 className={"col-header"}>{statusObj.status.toUpperCase()}</h2>
                         <DropWrapper onDrop={onDrop} status={statusObj.status}>
                             <Col>
-                                {items
+                                {!items ? [] : items
                                     .filter(itemObj => itemObj.status === statusObj.status)
                                     .map((itemObj, idNr) => <Item key={itemObj.id} item={itemObj} index={idNr} moveItem={moveItem} status={statusObj} statusId={statusId} handleItemButtonMove={handleItemButtonMove} handleDescChange={handleDescChange} handleTitleChange={handleTitleChange} handleCommentSave={handleCommentSave} handleCommentChange={handleCommentChange} handleSaveCard={handleSaveCard} handleArchiveCard={handleArchiveCard} />)
                                 }
