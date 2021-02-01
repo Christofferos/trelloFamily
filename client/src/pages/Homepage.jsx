@@ -103,7 +103,9 @@ const Homepage = () => {
         /* Update state in database */
         item.icon = statusId;
         socket.emit("createTask", item);
-        item.icon = iconAndStatus.icon;
+        item.icon = await iconAndStatus.icon;
+        console.log(iconAndStatus.icon);
+        console.log(item.icon);
 
         /* Update states in front-end */
         setItems(prevState => {
@@ -111,6 +113,8 @@ const Homepage = () => {
             newItems.splice(prevState.length, 0, item);
             return [...newItems];
         });
+
+        console.log(item);
 
         socket.emit("getItems");
     };
