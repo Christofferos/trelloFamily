@@ -27,7 +27,8 @@ const Homepage = () => {
         socket.on("getItemsResponse", data => {
             console.log("Data sent from the server, getItemsResponse: ");
             console.log(data);
-            itemId = data.length ? data.length : 0;
+            itemId = !data ? data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), data[0].id) : Math.floor(Math.random() * (98) + 1);
+            // itemId = data.length ? data.length : 0;
             if (!itemId) itemId = 0; // will check for empty strings (""), null, undefined, false and the numbers 0 and NaN
             setItems(data);
         })
