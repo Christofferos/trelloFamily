@@ -211,6 +211,7 @@ const Homepage = () => {
         await setItems(prevState => {
             return [...prevState.filter(itemObj => itemObj.id !== itemIndex)];
         });
+        socket.emit("getItems");
     }
 
     // @desc    Move task/card left or right (requirement for mobile use). 
