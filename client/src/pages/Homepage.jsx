@@ -37,7 +37,7 @@ const Homepage = () => {
             }
             // itemId = data.length ? data.length : 0;
             if (!itemId) itemId = 0; // will check for empty strings (""), null, undefined, false and the numbers 0 and NaN
-            setItems(data);
+            setItems([...data]);
         })
         socket.on("createTask", data => {
             console.log("Data sent from the server in createTask procedure: ");
