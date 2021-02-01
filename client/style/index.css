@@ -163,10 +163,12 @@ select {
   background-color: #f4f5f7;
   border-radius: 2px;
   margin: 48px 0 80px;
-  min-height: 450px;
+  min-height: 300px; /* 450px */
   width: 800px;
   outline: none;
   padding: 20px;
+
+  overflow-y: auto;
 }
 
 .overlay {
@@ -233,4 +235,9 @@ select {
   flex: 1 1 auto;
   justify-content: flex-start;
   margin: 3vh 0rem 0rem 0rem;
+}
+
+.ReactModal__Html--open,
+.ReactModal__Body--open {
+  overflow: hidden; /* prevents background page from scrolling when the modal is open */
 }

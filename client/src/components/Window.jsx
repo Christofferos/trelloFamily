@@ -20,8 +20,8 @@ const Window = ({ show, onClose, item, statusId, handleItemButtonMove, handleDes
             overlayClassName={"overlay"}
         >
             <div className={"close-btn-ctn"}>
-                <input value={item.title} onChange={(event) => handleTitleChange(event, item.id)} style={{ flex: "1 90%", background: "transparent", border: "none", fontSize: "40px", height: "75px" }}></input>
-                <button className="close-btn" onClick={onClose}>X</button>
+                <input value={item.title} onChange={(event) => handleTitleChange(event, item.id)} style={{ flex: "1 80%", background: "transparent", border: "none", fontSize: "40px", height: "75px" }}></input>
+                <button className="close-btn" style={{width: "100px", height: "77px", fontSize:"50px"}} onClick={onClose}>X</button>
             </div>
             <div>
                 <p style={{fontSize: "1.5em", fontWeight: "bolder"}}>Description</p>
