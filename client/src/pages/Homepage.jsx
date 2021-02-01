@@ -28,7 +28,13 @@ const Homepage = () => {
             console.log("Data sent from the server, getItemsResponse: ");
             console.log(data);
             console.log(dataLength);
-            itemId = (!data && dataLength !== 0) ? Math.floor(Math.random() * (98) + 1) : data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), !dataLength ? data.id : data[0].id);
+            if (!data) {
+                itemId = Math.floor(Math.random() * (98) + 1);
+            } else if (!dataLength) {
+                itemId = data.id;
+            } else {
+                itemId = data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), data[0].id)
+            }
             // itemId = data.length ? data.length : 0;
             if (!itemId) itemId = 0; // will check for empty strings (""), null, undefined, false and the numbers 0 and NaN
             setItems(data);
