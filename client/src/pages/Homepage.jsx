@@ -24,10 +24,10 @@ const Homepage = () => {
         socket.emit("getItems");
 
         // Incoming responses
-        socket.on("getItemsResponse", data => {
+        socket.on("getItemsResponse", (data, dataLength) => {
             console.log("Data sent from the server, getItemsResponse: ");
             console.log(data);
-            itemId = !data ? Math.floor(Math.random() * (98) + 1): data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), data[0].id);
+            itemId = (!data && dataLength !== 0) ? Math.floor(Math.random() * (98) + 1) : data.reduce((max, currentObj) => (currentObj.id > max ? currentObj.id : max), dataLength === 1 ? data.id : data[0].id);
             // itemId = data.length ? data.length : 0;
             if (!itemId) itemId = 0; // will check for empty strings (""), null, undefined, false and the numbers 0 and NaN
             setItems(data);
@@ -224,7 +224,6 @@ const Homepage = () => {
                         <h2 className={"col-header"}>{statusObj.status.toUpperCase()}</h2>
                         <DropWrapper onDrop={onDrop} status={statusObj.status}>
                             <Col>
-                                {console.log(items)}
                                 {!items ? [] : items.filter(itemObj => itemObj.status === statusObj.status).map((itemObj, idNr) => <Item key={itemObj.id} item={itemObj} index={idNr} moveItem={moveItem} status={statusObj} statusId={statusId} handleItemButtonMove={handleItemButtonMove} handleDescChange={handleDescChange} handleTitleChange={handleTitleChange} handleCommentSave={handleCommentSave} handleCommentChange={handleCommentChange} handleSaveCard={handleSaveCard} handleArchiveCard={handleArchiveCard} />)}
                                 <p id={statusId} className="add-btn" onClick={() => addItem(statusId)}><a><FontAwesomeIcon icon={faPlus} /> Add a card</a></p>
                             </Col>

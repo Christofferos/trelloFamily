@@ -15,9 +15,9 @@ const io = require("socket.io")(server, {
 const session = require("express-session");
 const dotenv = require("dotenv");
 const dotenvResult = dotenv.config({
-  /* PATH: Production: "./config/config.env" */ /* Development: "./database/config/config.env" */ 
+  /* PATH: Production: "./config/config.env" */ /* Development: "./database/config/config.env" */
   path: "./config/config.env",
-}); 
+});
 if (dotenvResult.error) {
   throw dotenvResult.error;
 }
@@ -56,18 +56,18 @@ io.on("connection", (client) => {
     const nrOfDeleted = await Task.deleteOne({ id: idSent });
     // io.sockets.in(roomName).emit("deleteTask", nrOfDeleted);
     client.emit("deleteTask", nrOfDeleted);
-    await io.sockets.in(roomName).emit("getItemsResponse", !items ? [] : items);
+    await io.sockets.in(roomName).emit("getItemsResponse", !items ? [] : items, !items ? 0 : items.length);
   }
   async function getItems() {
     // console.log("TEST");
     const items = await Task.find({ id: { $gt: -1 } });
-    io.sockets.in(roomName).emit("getItemsResponse", items);
+    io.sockets.in(roomName).emit("getItemsResponse", !items ? [] : items, !items ? 0 : items.length);
     // client.emit("getItemsResponse", items);
   }
 
   async function updateTask(item, items) {
-    await Task.replaceOne({id: item.id}, item);
-    await io.sockets.in(roomName).emit("getItemsResponse", items);
+    await Task.replaceOne({ id: item.id }, item);
+    await io.sockets.in(roomName).emit("getItemsResponse", !items ? [] : items, !items ? 0 : items.length);
   }
 });
 
